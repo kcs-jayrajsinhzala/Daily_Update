@@ -1,19 +1,21 @@
-import {
-  ForbiddenException,
-  HttpException,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { SignUp } from './dto/user.dto';
 import * as argon from 'argon2';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaClient, User } from '@prisma/client';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 const prisma = new PrismaClient();
 
 @Injectable()
 export class AppService {
   constructor(private jwt: JwtService) {}
+
+  // @Cron(CronExpression.EVERY_10_SECONDS)
+  handleCron() {
+    console.log('Called when the current second is 10');
+  }
+
   async signup(dto: SignUp) {
     const hash = await argon.hash(dto.password);
 
